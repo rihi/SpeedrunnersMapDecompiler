@@ -10,9 +10,18 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
- * Class representing an entity in a map
- * <p></p>
- * <p>An entity has a {@code xCoordinate}, {@code yCoordinate}, {@code width}, {@code height}, {@code elementName} and an array of {@link Attribute}'s containing additional info</p>
+ * <p>Class representing an entity in a map</p>
+ * <br>
+ * <br>
+ * <p>It consist of several public variables:</p>
+ * <ul>
+ *     <li>{@link #xCoordinate}</li>
+ *     <li>{@link #yCoordinate}</li>
+ *     <li>{@link #width}</li>
+ *     <li>{@link #height}</li>
+ *     <li>{@link #elementName}</li>
+ *     <li>{@link #attributes}</li>
+ * </ul>
  */
 public class Entity
 {

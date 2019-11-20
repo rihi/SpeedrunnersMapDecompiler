@@ -17,18 +17,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
-    <profiles>
-        <profile>
-            <id>java8-doclint-disabled</id>
-            <activation>
-                <jdk>[1.8,)</jdk>
-            </activation>
-            <properties>
-                <doclint>none</doclint>
-            </properties>
-        </profile>
-    </profiles>
-
     <build>
         <plugins>
             <plugin>
