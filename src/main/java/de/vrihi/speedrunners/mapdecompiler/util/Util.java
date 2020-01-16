@@ -1,4 +1,4 @@
-package de.vrihi.speedrunnersmapdecompiler.util;
+package de.vrihi.speedrunners.mapdecompiler.util;
 
 import java.io.IOException;
 import java.io.InputStream;

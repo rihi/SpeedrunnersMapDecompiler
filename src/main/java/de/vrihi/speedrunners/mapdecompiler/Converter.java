@@ -1,6 +1,6 @@
-package de.vrihi.speedrunnersmapdecompiler;
+package de.vrihi.speedrunners.mapdecompiler;
 
-import de.vrihi.speedrunnersmapdecompiler.data.SpeedrunnersMapData;
+import de.vrihi.speedrunners.mapdecompiler.data.SpeedrunnersMapData;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

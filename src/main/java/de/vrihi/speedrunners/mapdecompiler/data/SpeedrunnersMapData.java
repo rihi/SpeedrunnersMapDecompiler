@@ -1,6 +1,6 @@
-package de.vrihi.speedrunnersmapdecompiler.data;
+package de.vrihi.speedrunners.mapdecompiler.data;
 
-import de.vrihi.speedrunnersmapdecompiler.util.Util;
+import de.vrihi.speedrunners.mapdecompiler.util.Util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,20 +11,54 @@ import java.util.StringJoiner;
 
 
 /**
- * <p>An object containing all information about a map.</p>
- * <p></p>
- * <p>A map has a {@code mapFormat}, an {@link Entity} array, an {@link Layer} array and a {@code theme}</p>
- * <p>Optionaly, if the map was uploaded to the workshop, an {@Link author}, a {@Link mapName} and a {@Link workshopId} is saved as well</p>
+ * Class representing the main structure of a map.
+ * <p>It consist of several public variables:</p>
+ * <ul>
+ *     <li>{@link #mapFormat}</li>
+ *     <li>{@link #entities}</li>
+ *     <li>{@link #layers}</li>
+ *     <li>{@link #theme}</li>
+ * </ul>
+ * <br>
+ * <p>Optionally:</p>
+ * <ul>
+ *     <li>{@link #author}</li>
+ *     <li>{@link #mapName}</li>
+ *     <li>{@link #workshopId}</li>
+ * </ul>
+ *
+ *
+ * <br>
+ * <p>{@link #author}, {@link #mapName} and {@link #workshopId}, are only present, if the map was uploaded to the workshop.</p>
  */
 public class SpeedrunnersMapData
 {
-	public long mapFormat;		//It's the very first variable so chances are high its the map format version. But no confirmation on that
+	/**
+	 * The map format version. (Seemed to be always 6?)
+	 * <p>This is not confirmed, but very likely as it is the first variable</p>
+	 */
+	public long mapFormat;
 	public Entity[] entities;
 	public Layer[] layers;
 
 	public String theme;
-	public String author;		// Author name and map name are available in all maps. Probably only in community maps
+
+	/**
+	 * The workshops author name
+	 */
+	public String author;
+
+	/**
+	 * The Workshops map name
+	 */
 	public String mapName;
+
+	/**
+	 * The workshop id, saved as an <b>signed</b> long.
+	 * <p>When using this value, always make sure to first convert the value to a unsigned long!
+	 *
+	 * @see #getWorkshopId()
+	 */
 	public long workshopId;	    // Workshop id as an !!!unsigned long!!!
 
 	/**

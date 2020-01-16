@@ -1,6 +1,6 @@
-package de.vrihi.speedrunnersmapdecompiler.data;
+package de.vrihi.speedrunners.mapdecompiler.data;
 
-import de.vrihi.speedrunnersmapdecompiler.util.Util;
+import de.vrihi.speedrunners.mapdecompiler.util.Util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,10 +9,19 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
- * Class representing a layer in a map
- * <p></p>
- * <p>A map contains multiple layers each being a 2 dimensional tile arrays</p>
- * <p>A Layer has a {@code name}, {@code width}, {@code height} and an array of {@code int} representing tiles</p>
+ * <p>Class representing a layer in a map</p>
+ * <br>
+ * <p>It consist of several public variables:</p>
+ * <ul>
+ *     <li>{@link #name}</li>
+ *     <li>{@link #width}</li>
+ *     <li>{@link #height}</li>
+ *     <li>{@link #tiles}</li>
+ *
+ * </ul>
+ *
+ * <br>
+ * <p>A layer is basically just a 2D tile array.</p>
  */
 public class Layer
 {

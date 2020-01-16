@@ -1,6 +1,6 @@
-package de.vrihi.speedrunnersmapdecompiler.data;
+package de.vrihi.speedrunners.mapdecompiler.data;
 
-import de.vrihi.speedrunnersmapdecompiler.util.Util;
+import de.vrihi.speedrunners.mapdecompiler.util.Util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,9 +9,9 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
- * Class representing an attribute of an entity
- * <p></p>
- * <p>An attribute consist out of a {@code key} and a {@code value}</p>
+ * <p>Class representing an attribute of an entity</p>
+ * <br>
+ * <p>An attribute consist of a {@link #value} and a {@link #value}</p>
  */
 public class Attribute
 {
