@@ -79,14 +79,11 @@ public class Converter
 	{
 		try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream())
 		{
-			map.writeStream(byteStream, writeWorkshop);
-			ByteArrayOutputStream compressedData = new ByteArrayOutputStream(byteStream.size());
-			try (GZIPOutputStream gzipOut = new GZIPOutputStream(compressedData))
+			try (GZIPOutputStream gzipOut = new GZIPOutputStream(byteStream))
 			{
-				gzipOut.write(byteStream.toByteArray());
+				map.writeStream(gzipOut, writeWorkshop);
 			}
-
-			return compressedData.toByteArray();
+			return byteStream.toByteArray();
 		}
 	}
 
