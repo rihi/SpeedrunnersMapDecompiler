@@ -4,10 +4,11 @@ import de.vrihi.speedrunners.mapdecompiler.data.SpeedrunnersMapData;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -25,17 +26,18 @@ public class Converter
 	 * @param path A {@link Path} object representing the map file
 	 * @return {@link SpeedrunnersMapData}
 	 * @throws IOException if an I/O error occurs
+	 *
+	 * @deprecated This method can trivially be achieved by using {@link Files#readAllBytes(Path)}
 	 */
+	@Deprecated(since = "1.1", forRemoval = true)
 	public static SpeedrunnersMapData read(Path path) throws IOException
 	{
-		if (Files.isDirectory(path) || Files.notExists(path))
-			throw new FileNotFoundException("The specified path doesn't point to a file");
-
 		return read(Files.readAllBytes(path));
 	}
 
 	/**
-	 * Creates a {@link SpeedrunnersMapData} object, based on the data in the supplied byte array
+	 * Reads data from the supplied byte array into a new {@link SpeedrunnersMapData} instance.
+	 * This method automatically determines if the data source is compressed with gzip compression.
 	 *
 	 * @param bytes A byte array of the map file
 	 * @return {@link SpeedrunnersMapData}
@@ -43,30 +45,22 @@ public class Converter
 	 */
 	public static SpeedrunnersMapData read(byte[] bytes) throws IOException
 	{
-		ByteBuffer byteData = ByteBuffer.wrap(bytes);
-		if (byteData.capacity() < 4 * 4)	// 4 Unsigned integers (4 * 4bytes)
+		if (bytes.length < 4 * 4)	// 4 Unsigned integers (4 * 4bytes)
 			throw new IOException("Invalid file, size to small");
 
-		// Check if the file is compressed with gzip
-		if (Byte.toUnsignedInt(byteData.get(0)) == 0x1f && Byte.toUnsignedInt(byteData.get(1)) == 0x8b && Byte.toUnsignedInt(byteData.get(2)) == 0x08 && Byte.toUnsignedInt(byteData.get(3)) == 0x00)
-		{
-			try (GZIPInputStream gzipIn = new GZIPInputStream(new ByteArrayInputStream(byteData.array()));
-				 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream())
-			{
-				int res1 = 0;
-				byte[] buf = new byte[1024];
-				while (res1 >= 0)
-				{
-					res1 = gzipIn.read(buf, 0, buf.length);
-					if (res1 > 0)
-						byteArrayOutputStream.write(buf, 0, res1);
-				}
+		int magic = Short.toUnsignedInt(ByteBuffer.wrap(bytes, 0, 2)
+				.order(ByteOrder.LITTLE_ENDIAN)
+				.getShort());
 
-				byteData = ByteBuffer.wrap(byteArrayOutputStream.toByteArray());
+		if (magic == GZIPInputStream.GZIP_MAGIC)
+		{
+			try (GZIPInputStream gzipIn = new GZIPInputStream(new ByteArrayInputStream(bytes)))
+			{
+				bytes = gzipIn.readAllBytes();
 			}
 		}
 
-		try (ByteArrayInputStream byteIn = new ByteArrayInputStream(byteData.array()))
+		try (ByteArrayInputStream byteIn = new ByteArrayInputStream(bytes))
 		{
 			SpeedrunnersMapData map = new SpeedrunnersMapData();
 			map.read(byteIn);
@@ -86,14 +80,11 @@ public class Converter
 	{
 		try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream())
 		{
-			map.writeStream(byteStream, writeWorkshop);
-			ByteArrayOutputStream compressedData = new ByteArrayOutputStream(byteStream.size());
-			try (GZIPOutputStream gzipOut = new GZIPOutputStream(compressedData))
+			try (GZIPOutputStream gzipOut = new GZIPOutputStream(byteStream))
 			{
-				gzipOut.write(byteStream.toByteArray());
+				map.writeStream(gzipOut, writeWorkshop);
 			}
-
-			return compressedData.toByteArray();
+			return byteStream.toByteArray();
 		}
 	}
 
@@ -104,7 +95,10 @@ public class Converter
 	 * @param path A {@link Path} object representing the file that gets written
 	 * @param writeWorkshop if workshop properties (author, mapName, workshopId) should be written
 	 * @throws IOException if an I/O error occurs
+	 *
+	 * @deprecated This method can trivially be achieved by using {@link Files#write(Path, byte[], OpenOption...)}
 	 */
+	@Deprecated(since = "1.1", forRemoval = true)
 	public static void write(SpeedrunnersMapData map, Path path, boolean writeWorkshop) throws IOException
 	{
 		Files.write(path, write(map, writeWorkshop));
