@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -94,7 +95,10 @@ public class Converter
 	 * @param path A {@link Path} object representing the file that gets written
 	 * @param writeWorkshop if workshop properties (author, mapName, workshopId) should be written
 	 * @throws IOException if an I/O error occurs
+	 *
+	 * @deprecated This method can trivially be achieved by using {@link Files#write(Path, byte[], OpenOption...)}
 	 */
+	@Deprecated(since = "1.1", forRemoval = true)
 	public static void write(SpeedrunnersMapData map, Path path, boolean writeWorkshop) throws IOException
 	{
 		Files.write(path, write(map, writeWorkshop));
