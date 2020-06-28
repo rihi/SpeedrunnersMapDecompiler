@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.GZIPInputStream;
@@ -43,30 +44,22 @@ public class Converter
 	 */
 	public static SpeedrunnersMapData read(byte[] bytes) throws IOException
 	{
-		ByteBuffer byteData = ByteBuffer.wrap(bytes);
-		if (byteData.capacity() < 4 * 4)	// 4 Unsigned integers (4 * 4bytes)
+		if (bytes.length < 4 * 4)	// 4 Unsigned integers (4 * 4bytes)
 			throw new IOException("Invalid file, size to small");
 
-		// Check if the file is compressed with gzip
-		if (Byte.toUnsignedInt(byteData.get(0)) == 0x1f && Byte.toUnsignedInt(byteData.get(1)) == 0x8b && Byte.toUnsignedInt(byteData.get(2)) == 0x08 && Byte.toUnsignedInt(byteData.get(3)) == 0x00)
-		{
-			try (GZIPInputStream gzipIn = new GZIPInputStream(new ByteArrayInputStream(byteData.array()));
-				 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream())
-			{
-				int res1 = 0;
-				byte[] buf = new byte[1024];
-				while (res1 >= 0)
-				{
-					res1 = gzipIn.read(buf, 0, buf.length);
-					if (res1 > 0)
-						byteArrayOutputStream.write(buf, 0, res1);
-				}
+		int magic = Short.toUnsignedInt(ByteBuffer.wrap(bytes, 0, 2)
+				.order(ByteOrder.LITTLE_ENDIAN)
+				.getShort());
 
-				byteData = ByteBuffer.wrap(byteArrayOutputStream.toByteArray());
+		if (magic == GZIPInputStream.GZIP_MAGIC)
+		{
+			try (GZIPInputStream gzipIn = new GZIPInputStream(new ByteArrayInputStream(bytes)))
+			{
+				bytes = gzipIn.readAllBytes();
 			}
 		}
 
-		try (ByteArrayInputStream byteIn = new ByteArrayInputStream(byteData.array()))
+		try (ByteArrayInputStream byteIn = new ByteArrayInputStream(bytes))
 		{
 			SpeedrunnersMapData map = new SpeedrunnersMapData();
 			map.read(byteIn);
