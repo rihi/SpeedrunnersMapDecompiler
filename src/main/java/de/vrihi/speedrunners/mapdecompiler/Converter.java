@@ -35,7 +35,8 @@ public class Converter
 	}
 
 	/**
-	 * Creates a {@link SpeedrunnersMapData} object, based on the data in the supplied byte array
+	 * Reads data from the supplied byte array into a new {@link SpeedrunnersMapData} instance.
+	 * This method automatically determines if the data source is compressed with gzip compression.
 	 *
 	 * @param bytes A byte array of the map file
 	 * @return {@link SpeedrunnersMapData}
