@@ -6,7 +6,7 @@
 
     <groupId>de.vrihi.speedrunners.mapdecompiler</groupId>
     <artifactId>speedrunners-mapdecompiler</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
 
     <name>SpeedrunnersMapDecompiler</name>
     <url>https://github.com/rihi/SpeedrunnersMapDecompiler</url>
