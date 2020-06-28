@@ -4,7 +4,6 @@ import de.vrihi.speedrunners.mapdecompiler.data.SpeedrunnersMapData;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -26,12 +25,12 @@ public class Converter
 	 * @param path A {@link Path} object representing the map file
 	 * @return {@link SpeedrunnersMapData}
 	 * @throws IOException if an I/O error occurs
+	 *
+	 * @deprecated This method can trivially be achieved by using {@link Files#readAllBytes(Path)}
 	 */
+	@Deprecated(since = "1.1", forRemoval = true)
 	public static SpeedrunnersMapData read(Path path) throws IOException
 	{
-		if (Files.isDirectory(path) || Files.notExists(path))
-			throw new FileNotFoundException("The specified path doesn't point to a file");
-
 		return read(Files.readAllBytes(path));
 	}
 
